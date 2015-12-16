@@ -1,3 +1,4 @@
+require('../../build/index.html'); // so we have live reload
 var data = require("./components/data.js");
 var d3 = require("d3");
 var $ = require("jquery");
@@ -8,23 +9,30 @@ var d = d = data(),
     table = d3.selectAll("#container"),
     thead = table.append("thead"),
     tbody = table.append("tbody"),
-    ident = function(x) {return x;}
+    ident = function(x) {return x;},
+    cells = null,
+    rows = null;
 
 function update(data) {
-    var rows = tbody.selectAll("tr")
-        .data(data)
+    rows = tbody.selectAll("tr")
+        .data(data);
 
     rows.enter()
         .append("tr");
 
-    var cells = rows.selectAll("td")
+    cells = rows.selectAll("td")
         .data(ident);
 
     cells.enter()
         .append("td")
-        .on("mouseover", function() { d3.select(this).classed("active", true ) })       // classed("active",boolean) not working
-        .on("mouseout",  function() { d3.select(this).classed("active", false) })
-        .text(function(d) {console.log(d.c); return d.c})
+        .classed("abc", true)
+        .on("mouseover", function(d) {
+            selectSameVersion(d.v, true)
+        })
+        .on("mouseout",  function(d) {
+            selectSameVersion(d.v, false)
+        })
+        .text(function(d) {return "v:" + d.v})
 
     cells.exit()
         .attr('class', 'exit')
@@ -44,4 +52,10 @@ function update(data) {
 
 }
 
-update(d)
+update(d);
+
+function selectSameVersion(version, bool) {
+    cells.filter(function(x) {
+        return x.v == version
+    }).classed("active", bool)
+}

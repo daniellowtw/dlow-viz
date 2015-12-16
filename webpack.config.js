@@ -8,7 +8,8 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.less$/, loader: 'style!css!less'},
-            {test: /\.css$/, loader: "style-loader!css-loader"}
+            {test: /\.css$/, loader: "style-loader!css-loader"},
+            {test: /\.html$/, loader: "raw-loader"} // Live reload for html files!
         ]
     },
     plugins: [

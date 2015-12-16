@@ -1,3 +1,16 @@
 .active {
-    font-size: xx-large;
+    font-size: 20px;
+}
+
+td.abc{
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
+}
+
+tr {
+    width: 50px;
+    height: 50px;
 }
