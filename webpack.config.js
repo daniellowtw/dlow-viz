@@ -18,5 +18,9 @@ module.exports = {
             jQuery: 'jquery',
             d3: 'd3'
         })
-    ]
+    ],
+    // Uncomment these to provide it at runtime
+    //externals: {
+    //    d3: 'd3',
+    //},
 };
