@@ -6,14 +6,23 @@ var $ = require("jquery");
 require("../style/main.css")
 
 var d = d = data(),
-    table = d3.selectAll("#container"),
+    table = d3.select("#container")
+        .append("table")
+        .style("border-collapse", "collapse")
+        .style("border", "2px black solid"),
     thead = table.append("thead"),
     tbody = table.append("tbody"),
     ident = function(x) {return x;},
+    displayFunc = genDisplayFunc(),
     cells = null,
     rows = null;
 
 function update(data) {
+    if (cells) {
+        cells.remove()
+
+    }
+    data = data || d;
     rows = tbody.selectAll("tr")
         .data(data);
 
@@ -27,12 +36,12 @@ function update(data) {
         .append("td")
         .classed("abc", true)
         .on("mouseover", function(d) {
-            selectSameVersion(d.v, true)
+            selectSameValue(d, true)
         })
         .on("mouseout",  function(d) {
-            selectSameVersion(d.v, false)
+            selectSameValue(d, false)
         })
-        .text(function(d) {return "v:" + d.v})
+        .text(displayFunc)
 
     cells.exit()
         .attr('class', 'exit')
@@ -54,8 +63,39 @@ function update(data) {
 
 update(d);
 
-function selectSameVersion(version, bool) {
+function selectSameValue(data, bool) {
     cells.filter(function(x) {
-        return x.v == version
+        return displayFunc(x) == displayFunc(data)
     }).classed("active", bool)
 }
+
+
+function genDisplayFunc(x) {
+    if (x == "health") {
+        return function(d) {return d.h}
+    } else if (x == "version") {
+        return function(d) {return d.v}
+    } else if (x == "buildtime") {
+        return function(d) {return d.t}
+    } else {
+        return function(d) {return d.v}
+    }
+}
+
+
+$("#health-button").click(function() {
+    displayFunc = genDisplayFunc("health");
+    update();
+    $("#current").html("t")
+});
+
+$("#version-button").click(function() {
+    displayFunc = genDisplayFunc("version");
+    update();
+    $("#current").html("v")
+});
+$("#buildtime-button").click(function() {
+    displayFunc = genDisplayFunc("buildtime");
+    update();
+    $("#current").html("b")
+});
