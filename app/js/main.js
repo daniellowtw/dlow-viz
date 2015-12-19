@@ -3,7 +3,7 @@ var data = require("./components/data.js");
 var d3 = require("d3");
 var $ = require("jquery");
 
-require("../style/main.css")
+require("../style/main.css");
 
 var d = d = data(),
     table = d3.select("#container")
@@ -15,7 +15,8 @@ var d = d = data(),
     ident = function(x) {return x;},
     displayFunc = genDisplayFunc(),
     cells = null,
-    rows = null;
+    rows = null,
+    color = d3.scale.category20();
 
 function update(data) {
     if (cells) {
@@ -66,7 +67,11 @@ update(d);
 function selectSameValue(data, bool) {
     cells.filter(function(x) {
         return displayFunc(x) == displayFunc(data)
-    }).classed("active", bool)
+    })
+        .transition()
+    .style('background-color', function(d) {
+        return bool ? color(displayFunc(d)) : 'white';
+    })
 }
 
 
