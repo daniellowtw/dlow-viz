@@ -5,7 +5,7 @@ var $ = require("jquery");
 
 require("../style/main.css");
 
-var d = d = data(),
+var d = d3.nest().key(function(d){return d.s}).entries(data()),
     table = d3.select("#container")
         .append("table")
         .style("border-collapse", "collapse")
@@ -31,7 +31,7 @@ function update(data) {
         .append("tr");
 
     cells = rows.selectAll("td")
-        .data(ident);
+        .data(function(x){return x.values});
 
     cells.enter()
         .append("td")
